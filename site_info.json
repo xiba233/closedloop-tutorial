@@ -1,0 +1,9 @@
+{
+  "site_name": "ClosedLoop V3.4 RC2.2 闭环自动化教程中心",
+  "version": "V3.4 RC2.2",
+  "type": "static",
+  "backend_required": false,
+  "database_required": false,
+  "chapters": 27,
+  "entry": "index.html"
+}

@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ClosedLoop V3.4 RC2.2 闭环自动化教程中心</title>
+<meta name="description" content="ClosedLoop V3.4 RC2.2 完全零基础闭环自动化教程">
+<style>
+:root{--sidebar:340px;--bg:#f5f7fa;--paper:#fff;--text:#1d2733;--muted:#667085;--brand:#235d93;--brand2:#173b5f;--line:#dfe5ec;--font:17px}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;font-family:"Microsoft YaHei","SimHei","Noto Sans CJK SC",Arial,sans-serif;background:var(--bg);color:var(--text);font-size:var(--font);line-height:1.8}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar);background:#fff;border-right:1px solid var(--line);display:flex;flex-direction:column;z-index:20}
+.brand{padding:22px 20px 15px;border-bottom:1px solid var(--line)} .brand h2{margin:0;color:var(--brand2);font-size:21px}.brand p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.search{padding:12px 14px 5px}.search input{width:100%;padding:10px 12px;border:1px solid #cbd5df;border-radius:10px;background:#f9fbfd;outline:none}.search input:focus{border-color:#78a6d0;box-shadow:0 0 0 3px rgba(35,93,147,.1)}
+.nav{padding:6px 9px 22px;overflow:auto;flex:1}.nav-item{width:100%;border:0;background:transparent;display:flex;align-items:flex-start;gap:10px;text-align:left;padding:9px;border-radius:10px;cursor:pointer;color:#3b4754;font-weight:700;line-height:1.45}.nav-item:hover{background:#f0f5fa}.nav-item.active{background:#e9f2fb;color:#17466e}.badge{min-width:34px;height:28px;border-radius:8px;background:#edf1f5;display:inline-flex;align-items:center;justify-content:center;font-size:12px}.nav-item.active .badge{background:var(--brand);color:#fff}
+.side-foot{border-top:1px solid var(--line);padding:10px 12px;display:flex;justify-content:space-between;align-items:center}.font-btn{border:1px solid #cbd5df;background:#fff;border-radius:8px;padding:5px 8px;cursor:pointer}
+.main{margin-left:var(--sidebar)} .top{position:sticky;top:0;height:58px;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 24px;z-index:10}.top strong{color:#294b69;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.top span{font-size:13px;color:var(--muted)}
+.menu{display:none;border:1px solid #cbd5df;background:#fff;border-radius:8px;padding:6px 9px;cursor:pointer}
+.content{max-width:1050px;margin:0 auto;padding:32px 42px 80px}.section{display:none;background:var(--paper);border:1px solid #e2e7ed;border-radius:16px;padding:30px 34px;box-shadow:0 8px 30px rgba(28,53,78,.05)}.section.active{display:block}.section h1{margin:0 0 20px;font-size:31px;color:#183f63;border-bottom:3px solid #d9e9f8;padding-bottom:12px;line-height:1.35}.section h3{color:#245b87;margin-top:28px}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:.94em}th{background:#264f76;color:#fff;text-align:left}th,td{border:1px solid #dce3ea;padding:10px 11px;vertical-align:top}tr:nth-child(even) td{background:#fbfcfd}
+pre,.flow{white-space:pre-wrap;background:#f6f8fa;border:1px solid #d9e0e7;border-radius:10px;padding:15px 16px;overflow:auto;line-height:1.65}.flow{font-family:inherit;text-align:center;font-weight:700;color:#254e72}
+.notice{border-left:5px solid #5f8fb9;border-radius:10px;padding:13px 15px;margin:16px 0;background:#eef6fd}.notice.good{background:#eef8ea;border-left-color:#65a34a}.notice.warn{background:#fff7dc;border-left-color:#d1a31d}.notice.stop{background:#fff0ed;border-left-color:#cb5a4a}.notice.info{background:#eef6fd}
+.pager{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--line);margin-top:34px;padding-top:18px}.pager button{border:1px solid #cbd5df;background:#fff;color:#244e74;border-radius:9px;padding:9px 13px;cursor:pointer;font-weight:700}.pager button:disabled{opacity:.35;cursor:default}
+.hero{background:linear-gradient(135deg,#173b5f,#2f70aa);color:white;border-radius:16px;padding:30px 32px;margin-bottom:22px}.hero h1{border:0;color:#fff;margin:0 0 6px;padding:0}.hero p{margin:0;opacity:.92}.hero small{display:block;margin-top:12px;opacity:.75}
+.back{position:fixed;right:20px;bottom:20px;border:0;background:#235d93;color:#fff;width:44px;height:44px;border-radius:50%;font-size:20px;cursor:pointer;box-shadow:0 5px 18px rgba(0,0,0,.15)}
+.overlay{display:none}
+@media(max-width:900px){.sidebar{transform:translateX(-100%);transition:.2s}.sidebar.open{transform:none;box-shadow:10px 0 30px rgba(0,0,0,.14)}.main{margin-left:0}.menu{display:inline-block}.content{padding:20px 14px 70px}.section{padding:22px 18px}.section h1{font-size:26px}.top{padding:0 12px}.top span{display:none}.overlay.show{display:block;position:fixed;inset:0;background:rgba(0,0,0,.25);z-index:15}}
+@media(max-width:520px){body{font-size:16px}.section{border-radius:10px}.section h1{font-size:23px}table{font-size:.88em}}
+@media print{.sidebar,.top,.back,.pager{display:none!important}.main{margin:0}.content{max-width:none;padding:0}.section{display:block!important;box-shadow:none;border:0;page-break-after:always}}
+</style>
+</head>
+<body>
+<aside class="sidebar" id="sidebar">
+  <div class="brand"><h2>ClosedLoop 教程中心</h2><p>V3.4 RC2.2 · 完全零基础版</p></div>
+  <div class="search"><input id="search" type="search" placeholder="搜索章节或内容…"></div>
+  <nav class="nav"><button class="nav-item active" data-id="0"><span class="badge">0</span><span>先记住这 8 句话</span></button><button class="nav-item" data-id="1"><span class="badge">1</span><span>这套 ClosedLoop 到底是什么</span></button><button class="nav-item" data-id="2"><span class="badge">2</span><span>RC2.2 文件包里每个文件是干什么的</span></button><button class="nav-item" data-id="3"><span class="badge">3</span><span>第一次使用前：准备电脑、文件夹和备份</span></button><button class="nav-item" data-id="4"><span class="badge">4</span><span>第一次安装 CodeBuddy：先做最低风险测试</span></button><button class="nav-item" data-id="5"><span class="badge">5</span><span>配置 Playwright：让 CodeBuddy 能操作 ChatGPT 网页</span></button><button class="nav-item" data-id="6"><span class="badge">6</span><span>开始一个新项目前，要打开哪些窗口</span></button><button class="nav-item" data-id="7"><span class="badge">7</span><span>第一次完整启动一个项目：从头照着做</span></button><button class="nav-item" data-id="8"><span class="badge">8</span><span>大型任务为什么允许很多轮</span></button><button class="nav-item" data-id="9"><span class="badge">9</span><span>自动续跑和 Supervisor：用人话怎么理解</span></button><button class="nav-item" data-id="10"><span class="badge">10</span><span>ChatGPT 网页出现奇怪状态时先不要乱点</span></button><button class="nav-item" data-id="11"><span class="badge">11</span><span>CodeBuddy 什么时候自己修，什么时候找修复端</span></button><button class="nav-item" data-id="12"><span class="badge">12</span><span>修复端到底负责什么</span></button><button class="nav-item" data-id="13"><span class="badge">13</span><span>修复端一次没修好，会不会无限循环</span></button><button class="nav-item" data-id="14"><span class="badge">14</span><span>人工测试：这是正常暂停，不是闭环坏了</span></button><button class="nav-item" data-id="15"><span class="badge">15</span><span>人工恢复桥：什么时候需要你搬运信息</span></button><button class="nav-item" data-id="16"><span class="badge">16</span><span>电脑重启、长期断网、第三方服务不可用时怎么做</span></button><button class="nav-item" data-id="17"><span class="badge">17</span><span>Recovery Capsule：大型项目的恢复存档</span></button><button class="nav-item" data-id="18"><span class="badge">18</span><span>想让项目连续跑几小时或几天，先看这里</span></button><button class="nav-item" data-id="19"><span class="badge">19</span><span>项目什么时候才算真的完成</span></button><button class="nav-item" data-id="20"><span class="badge">20</span><span>小白版“绝对不要做”清单</span></button><button class="nav-item" data-id="21"><span class="badge">21</span><span>常见问题：遇到时直接看这里</span></button><button class="nav-item" data-id="22"><span class="badge">22</span><span>一页快速操作流程</span></button><button class="nav-item" data-id="23"><span class="badge">23</span><span>常见专业词，用最简单的话理解</span></button><button class="nav-item" data-id="24"><span class="badge">24</span><span>文件完整性和版本</span></button><button class="nav-item" data-id="25"><span class="badge">25</span><span>最后再记住这 7 句话</span></button><button class="nav-item" data-id="cp1"><span class="badge">CP1</span><span>RC2.2-CP1 最新收口提示</span></button></nav>
+  <div class="side-foot"><span>字体大小</span><div><button id="minus" class="font-btn">A−</button> <button id="reset" class="font-btn">默认</button> <button id="plus" class="font-btn">A+</button></div></div>
+</aside>
+<div class="overlay" id="overlay"></div>
+<main class="main">
+  <header class="top"><div style="display:flex;align-items:center;gap:10px;min-width:0"><button id="menu" class="menu">☰ 章节</button><strong id="topTitle"></strong></div><span>点击左侧章节切换内容</span></header>
+  <div class="content">
+    <div class="hero"><h1>ClosedLoop V3.4 RC2.2 闭环自动化教程中心</h1><p>完全零基础版：按章节阅读，适合刚接触电脑不久的用户。</p><small>这是可直接部署的静态网站，不需要数据库或后端程序。</small></div>
+    <article class="section active" id="sec-0" data-id="0" data-title="先记住这 8 句话"><h1>先记住这 8 句话</h1>
+<p>正常时，是“ChatGPT 决策端”和“CodeBuddy”来回工作：决策端负责想下一步，CodeBuddy 负责真的操作电脑。</p>
+<ol>
+<li>需求润色端主要在项目开始时用来把你的话整理清楚；它不负责长期执行项目。</li>
+<li>异常修复端平时待机。只有闭环真的卡住，而且 CodeBuddy 自己的普通恢复也解决不了时，才介入。</li>
+<li>CodeBuddy 一轮工作结束，不等于整个项目结束。大型任务可以一轮一轮做很多次。</li>
+<li>正常运行时，你不需要反复输入“继续”“继续闭环执行”。RC2.2 的目标就是让系统自己接力。</li>
+<li>看到 ChatGPT 页面空白、假“正在思考”、连接中断、发送超时，不要自己乱点重试或重复发送。</li>
+<li>真正需要你本人出手的，主要是登录、验证码、2FA、电脑重启后自动链路没恢复、长期断网、人工测试等真实人工边界。</li>
+<li>如果你不知道发生了什么：不要猜、不要重发、不要重做。保留现场，按“人工恢复桥”把 CodeBuddy 最后内容和你看到的真实情况交给修复端。</li>
+</ol>
+<div class="notice good"><strong>最重要的一句话：</strong>正常时“决策端 ↔ CodeBuddy”；异常时“CodeBuddy ↔ 修复端”；修好以后必须回到原主闭环。</div>
+<div class="pager"></div></article><article class="section" id="sec-1" data-id="1" data-title="这套 ClosedLoop 到底是什么"><h1>这套 ClosedLoop 到底是什么</h1>
+<p>你可以把它想成一个“会自己记录进度、会分轮工作、出问题会尝试自救”的自动化项目班组。</p>
+<table><thead><tr><th>角色</th><th>把它想成</th><th>负责什么</th></tr></thead><tbody>
+<tr><td>需求润色端</td><td>需求整理员</td><td>把你说的话整理成清楚、可确认的需求包。</td></tr>
+<tr><td>ChatGPT 决策端</td><td>项目经理</td><td>研究、判断、审核上一轮结果、决定下一轮做什么。</td></tr>
+<tr><td>CodeBuddy</td><td>实际操作员</td><td>读文件、改文件、操作浏览器、验证真实结果、汇报给决策端。</td></tr>
+<tr><td>ChatGPT 异常修复端</td><td>维修工程师</td><td>只修通信、页面、状态、消息、恢复链；不改业务目标。</td></tr>
+<tr><td>Supervisor / Watchdog</td><td>自动接力看门人</td><td>CodeBuddy 一轮结束或卡住时，负责自动唤醒/重启控制流程。</td></tr>
+</tbody></table>
+<div class="notice warn"><strong>不要混淆：</strong>真正有权决定“下一步业务做什么”的只有决策端。</div>
+<div class="pager"></div></article><article class="section" id="sec-2" data-id="2" data-title="RC2.2 文件包里每个文件是干什么的"><h1>RC2.2 文件包里每个文件是干什么的</h1>
+<p>RC2.2 比早期版本多出一些文件，但这些文件并不代表新增了很多 AI。多数是规则、审计和归档资料。</p>
+<table><thead><tr><th>文件</th><th>用途</th><th>普通用户是否常用</th></tr></thead><tbody>
+<tr><td>ChatGPT需求润色整理端启动文档</td><td>建立“需求整理员”角色。</td><td>项目开始时用</td></tr>
+<tr><td>ChatGPT决策端启动文档</td><td>建立“项目经理”角色。</td><td>每个项目用</td></tr>
+<tr><td>ChatGPT闭环异常修复端启动文档</td><td>建立“维修工程师”角色。</td><td>每个项目建立后待机</td></tr>
+<tr><td>CodeBuddy执行端启动指令 TXT</td><td>真正复制给 CodeBuddy 的执行端规则。</td><td>会用</td></tr>
+<tr><td>CodeBuddy执行端 DOCX</td><td>人类阅读/审计版。</td><td>一般不用</td></tr>
+<tr><td>协议总规范</td><td>整套系统的总规则书。</td><td>维护时用</td></tr>
+<tr><td>自动续跑与人工恢复桥协议</td><td>说明自动接力、人工恢复桥。</td><td>排障时用</td></tr>
+<tr><td>跨文档一致性审计报告</td><td>检查不同文档有没有互相打架。</td><td>维护时用</td></tr>
+<tr><td>SHA256校验值 / 静态审计 JSON</td><td>文件完整性与机器审计。</td><td>日常不用</td></tr>
+</tbody></table>
+<div class="notice info"><strong>最重要：</strong>给 CodeBuddy 使用的是 TXT；DOCX 主要是给人阅读、审计、归档。</div>
+<div class="pager"></div></article><article class="section" id="sec-3" data-id="3" data-title="第一次使用前：准备电脑、文件夹和备份"><h1>第一次使用前：准备电脑、文件夹和备份</h1>
+<p>正式项目之前先准备三类目录：ClosedLoop 文件包目录、可丢弃测试工作区、独立状态文件夹。</p>
+<ul>
+<li>重要原始数据先备份。</li>
+<li>第一次只给 CodeBuddy 打开真正需要处理的目录，不要直接开放整个系统盘。</li>
+<li>状态文件夹不要放进要保护的原始项目目录。</li>
+<li>电脑不要设置成几分钟就自动睡眠。</li>
+<li>同一个项目不要同时开两个“决策端”主页面或两个“修复端”主页面。</li>
+</ul>
+<div class="notice warn"><strong>状态文件夹不要乱删：</strong>它相当于游戏存档，里面保存进度、检查点、恢复记录、消息和动作状态。</div>
+<div class="pager"></div></article><article class="section" id="sec-4" data-id="4" data-title="第一次安装 CodeBuddy：先做最低风险测试"><h1>第一次安装 CodeBuddy：先做最低风险测试</h1>
+<ol>
+<li>安装并登录 CodeBuddy。</li>
+<li>打开一个空的测试文件夹，不要直接打开正式项目。</li>
+<li>放一个普通 test.txt，让 CodeBuddy 只读取内容。</li>
+<li>让 CodeBuddy 新建 hello.txt，确认它真的能创建文件。</li>
+<li>不要为了方便就无条件开放全盘删除、支付、发布等高风险权限。</li>
+</ol>
+<div class="pager"></div></article><article class="section" id="sec-5" data-id="5" data-title="配置 Playwright：让 CodeBuddy 能操作 ChatGPT 网页"><h1>配置 Playwright：让 CodeBuddy 能操作 ChatGPT 网页</h1>
+<p>Playwright 可以理解为“让 CodeBuddy 像人一样打开网页、看页面、点按钮、刷新页面”。</p>
+<ol>
+<li>确认 CodeBuddy 能启动一个由它控制的浏览器。</li>
+<li>打开 ChatGPT 登录页。</li>
+<li>出现登录、验证码、2FA 时，由你本人完成。</li>
+<li>让 CodeBuddy 读取页面上一小段普通文字，确认它不只是把浏览器打开了，而是真的能看页面。</li>
+</ol>
+<div class="notice warn"><strong>页面规则：</strong>决策端保留一个主页面，修复端也保留一个主页面；不要同一角色重复开很多活动页面。</div>
+<div class="pager"></div></article><article class="section" id="sec-6" data-id="6" data-title="开始一个新项目前，要打开哪些窗口"><h1>开始一个新项目前，要打开哪些窗口</h1>
+<table><thead><tr><th>窗口</th><th>什么时候建立</th><th>项目运行时是否长期保留</th></tr></thead><tbody>
+<tr><td>需求润色端</td><td>项目开始时</td><td>需求冻结后可以退出主流程</td></tr>
+<tr><td>决策端</td><td>需求包准备好后</td><td>是，主闭环核心</td></tr>
+<tr><td>异常修复端</td><td>正式运行前</td><td>是，平时待机</td></tr>
+<tr><td>CodeBuddy</td><td>正式运行前</td><td>是，实际执行端</td></tr>
+</tbody></table>
+<div class="notice warn"><strong>不要传错文件：</strong>总规范、审计报告、SHA256、JSON 等维护资料平时不要一股脑上传到决策端或修复端。</div>
+<div class="pager"></div></article><article class="section" id="sec-7" data-id="7" data-title="第一次完整启动一个项目：从头照着做"><h1>第一次完整启动一个项目：从头照着做</h1>
+<h3>第 1 步：需求润色端</h3>
+<ol><li>新开 ChatGPT 对话，上传需求润色端启动文档。</li><li>用普通话描述你想做什么。</li><li>按真实意愿确认关键路径、删除/覆盖权限、版本等问题。</li><li>拿到完整 Frozen Requirement Package。</li></ol>
+<h3>第 2 步：决策端</h3>
+<ol><li>新开 ChatGPT 对话，上传决策端启动文档。</li><li>把完整 Frozen Requirement Package 交给它。</li><li>等待它完成审核并拆分 Work Unit。</li></ol>
+<h3>第 3 步：异常修复端</h3>
+<ol><li>新开 ChatGPT 对话，上传修复端启动文档。</li><li>看到“待机”状态即可，不要给它正常业务任务。</li></ol>
+<h3>第 4 步：复制两个网页地址</h3>
+<p>复制“决策端网址”和“修复端网址”。Ctrl+A=全选，Ctrl+C=复制，Ctrl+V=粘贴。</p>
+<h3>第 5 步：启动 CodeBuddy</h3>
+<ol><li>打开 CodeBuddy 执行端 TXT。</li><li>Ctrl+A 全选，Ctrl+C 复制。</li><li>粘贴到 CodeBuddy 聊天并发送。</li><li>按提示把决策端网址和修复端网址交给 CodeBuddy。</li></ol>
+<h3>第 6 步：等待 Handshake / Control Setup</h3>
+<p>这一步通常不用理解，只要不要同时手工乱点。系统会检查能力、状态文件夹、单写保护、页面绑定等。</p>
+<h3>第 7 步：进入主闭环</h3>
+<div class="flow">决策端下发本轮指令 → CodeBuddy 执行 → CodeBuddy 验证 → 汇报真实结果 → 决策端审核 → 下发下一轮 → 持续循环</div>
+<div class="notice good"><strong>RC2.2 的重要变化：</strong>正常情况下，你不需要每轮手工输入“继续闭环执行”。</div>
+<div class="pager"></div></article><article class="section" id="sec-8" data-id="8" data-title="大型任务为什么允许很多轮"><h1>大型任务为什么允许很多轮</h1>
+<p>大项目最危险的不是轮次多，而是一次让 CodeBuddy 做太多，做到一半出问题以后谁也说不清已经做了什么。</p>
+<div class="flow">一个 Work Unit = 一次明确授权 + 一次执行 + 一次 fresh verify + 一次结果汇报 + 一次决策端重新审核</div>
+<p>10 轮、50 轮、100 轮都可以。真正重要的是每轮有边界、有结果、有检查点。</p>
+<h3>CodeBuddy complete 是什么意思？</h3>
+<p>它可能只表示当前一次 agent 工作结束，不代表项目完成。RC2.2 把“业务是否继续”和“当前 CodeBuddy 进程有没有结束”分开。</p>
+<div class="notice good"><strong>正常情况下：</strong>不要看到 complete 就马上输入“继续”，也不要马上把它交给修复端。系统应该自动续跑。</div>
+<div class="pager"></div></article><article class="section" id="sec-9" data-id="9" data-title="自动续跑和 Supervisor：用人话怎么理解"><h1>自动续跑和 Supervisor：用人话怎么理解</h1>
+<p>Supervisor 可以理解成“看门人”。它不做业务决策，只检查 CodeBuddy 这一轮结束以后项目是不是还 ACTIVE；如果还要继续，就把下一次 Controller Tick 再启动起来。</p>
+<div class="notice warn"><strong>现实限制：</strong>规则写进文档，不代表你的 Windows/CodeBuddy 环境已经真实具备可靠 Supervisor。长时间无人值守前必须先做 Runtime Regression。</div>
+<div class="pager"></div></article><article class="section" id="sec-10" data-id="10" data-title="ChatGPT 网页出现奇怪状态时先不要乱点"><h1>ChatGPT 网页出现奇怪状态时先不要乱点</h1>
+<h3>情况 A：回复壳子已经出现，但正文是空的</h3>
+<p>这时后台可能已经生成了完整回复，只是网页没有正常显示。</p>
+<div class="notice stop"><strong>不要：</strong>不要重复发送上一条消息，不要马上点“重新生成”。</div>
+<p>正确方向：保存状态 → 刷新 → 重新加载 → 查历史 → 必要时隔一段时间再刷新 → 找到完整回复后校验。</p>
+<h3>情况 B：“消息发送超时，请重试”</h3>
+<p>超时不等于没发送。原消息可能已经提交，甚至回复可能已经存在。</p>
+<div class="notice stop"><strong>不要：</strong>不要看到 Retry 就马上点。先 history audit，确认消息和回复到底是什么状态。</div>
+<h3>其它常见异常</h3>
+<table><thead><tr><th>现象</th><th>默认处理</th></tr></thead><tbody>
+<tr><td>一直“正在思考”，但发送按钮恢复</td><td>视为可能显示不同步，刷新并查历史。</td></tr>
+<tr><td>一直“正在思考”，也像在生成</td><td>看有没有真实正文/packet 进展，长时间无进展才刷新。</td></tr>
+<tr><td>“正在思考”消失，但没有正文</td><td>不能认为没有回复；刷新、重载、查历史。</td></tr>
+<tr><td>“连接中断，正在等待完整回复”</td><td>刷新 → 检查 → 等待 → 必要时再刷新。</td></tr>
+</tbody></table>
+<p>当前 30 秒刷新只是测试默认值，不是死规定；真正重要的是有没有实际进展。</p>
+<div class="pager"></div></article><article class="section" id="sec-11" data-id="11" data-title="CodeBuddy 什么时候自己修，什么时候找修复端"><h1>CodeBuddy 什么时候自己修，什么时候找修复端</h1>
+<div class="flow">
+L0：CodeBuddy 本地恢复<br>
+↓<br>
+L1：CodeBuddy 自动调用修复端<br>
+↓<br>
+L2：Emergency Continuation<br>
+↓<br>
+L3：Manual Recovery Bridge
+</div>
+<p>L0 包括刷新、重新绑定、查历史、消息状态核对、Action reconciliation 等。</p>
+<div class="notice info"><strong>重要原则：</strong>如果 CodeBuddy 自己也无法判断“现在是不是安全”，不应该问用户猜，而应把“不确定”本身作为 Repair 触发条件。</div>
+<div class="pager"></div></article><article class="section" id="sec-12" data-id="12" data-title="修复端到底负责什么"><h1>修复端到底负责什么</h1>
+<table><thead><tr><th>修复端可以做</th><th>修复端不能做</th></tr></thead><tbody>
+<tr><td>判断网页/浏览器/消息/状态哪里坏了</td><td>修改项目业务目标</td></tr>
+<tr><td>告诉 CodeBuddy 如何安全刷新、重绑、核对消息</td><td>自己制定新的业务技术路线</td></tr>
+<tr><td>处理 unknown message、页面绑定、ledger 等控制问题</td><td>跳过决策端直接给 CodeBuddy 新业务 Work Unit</td></tr>
+<tr><td>确认什么时候可以安全回主闭环</td><td>宣布项目最终业务 PASS</td></tr>
+</tbody></table>
+<div class="pager"></div></article><article class="section" id="sec-13" data-id="13" data-title="修复端一次没修好，会不会无限循环"><h1>修复端一次没修好，会不会无限循环</h1>
+<p>不会。只有“有真实进展”的 Repair 才继续。</p>
+<p>例如：页面从“绑定不确定”变成“绑定正常”，未知消息从 1 条变成 0 条，这算进展。</p>
+<div class="notice warn"><strong>连续无进展：</strong>不能无限重复刷新。应升级到 Emergency Continuation，优先保住已经完成的成果。</div>
+<div class="pager"></div></article><article class="section" id="sec-14" data-id="14" data-title="人工测试：这是正常暂停，不是闭环坏了"><h1>人工测试：这是正常暂停，不是闭环坏了</h1>
+<p>有些项目必须由人亲自看、亲自体验或亲自操作。决策端必须给完整测试方案，而不是只说“请测试一下”。</p>
+<table><thead><tr><th>测试编号</th><th>测试内容</th><th>操作步骤</th><th>预期结果</th><th>实际结果</th><th>是否通过</th><th>异常说明</th></tr></thead><tbody>
+<tr><td>T01</td><td>示例：启动程序</td><td>1. 打开程序<br>2. 等待进入主界面</td><td>正常进入且不崩溃</td><td></td><td></td><td></td></tr>
+</tbody></table>
+<p>人工测试期间 CodeBuddy 应进入 WAITING_FOR_MANUAL_TEST_RESULT，保存状态，不继续修改被测对象。</p>
+<div class="flow">你提交测试结果 → CodeBuddy 保存并结构检查 → 原样转交决策端 → 决策端决定通过 / 修复 / 补测 / 完成</div>
+<div class="pager"></div></article><article class="section" id="sec-15" data-id="15" data-title="人工恢复桥：什么时候需要你搬运信息"><h1>人工恢复桥：什么时候需要你搬运信息</h1>
+<p>只有自动链路本身也传不动故障信息时，才使用人工恢复桥。</p>
+<ul><li>登录彻底失效</li><li>CAPTCHA / 2FA</li><li>电脑重启后自动控制器没恢复</li><li>网络长期断开后恢复联网但没有自动接上</li><li>第三方服务长期不可用</li><li>不可观测的非幂等外部操作</li></ul>
+<p>你只负责：观察、复制、描述、身份验证、搬运信息。</p>
+<div class="notice stop"><strong>你不负责：</strong>判断从哪一步继续、重发上一轮、重做业务动作、判断协议状态。</div>
+<h3>人工恢复桥模板</h3>
+<pre>【V3.4 RC2.2 人工恢复桥】
+
+请不要进行新的业务决策。
+请只分析当前闭环故障，并给出闭环恢复指令。
+
+【CodeBuddy 最后可复制的原始内容】
+&lt;把 CodeBuddy 最后能复制的内容完整粘贴在这里&gt;
+
+【我实际看到的情况】
+发生时间：
+发生了什么：
+我最后确认成功的步骤：
+中断以后我是否重新发送过消息：否 / 是，具体是：
+中断以后我是否重新执行过业务操作：否 / 是，具体是：
+当前 CodeBuddy：正常可打开 / 已退出 / 报错 / 不确定
+当前 ChatGPT 决策端：正常 / 要重新登录 / 页面异常 / 无法访问 / 不确定
+当前 Repair 页面：正常 / 要重新登录 / 无法访问 / 尚未打开
+当前网络：正常 / 不稳定 / 已恢复 / 仍然断开
+电脑是否重启过：否 / 是
+是否有截图或日志：
+
+请先判断：
+1. 当前是否允许继续业务；
+2. 是否存在未知 Action；
+3. 是否存在未知 Message；
+4. 是否可能重复执行上一轮；
+5. 应执行什么修复；
+6. 修复后如何安全回到原主闭环。</pre>
+<div class="pager"></div></article><article class="section" id="sec-16" data-id="16" data-title="电脑重启、长期断网、第三方服务不可用时怎么做"><h1>电脑重启、长期断网、第三方服务不可用时怎么做</h1>
+<h3>电脑重启</h3>
+<ol><li>重新打开 CodeBuddy 和浏览器，但先不要执行业务命令。</li><li>不要输入“从头再来”或“继续上一轮”。</li><li>优先让系统读取 Durable State 和 Recovery Capsule。</li><li>自动恢复没开始时，再用人工恢复桥。</li></ol>
+<h3>网络长期断开</h3>
+<p>断网时冻结业务，不要离线重复执行。恢复网络后再重新绑定；自动恢复失败再用人工恢复桥。</p>
+<h3>第三方服务不可用</h3>
+<p>Repair 不能把对方网站“修上线”，只能保存 checkpoint、阻止重复提交并等待外部服务恢复。</p>
+<h3>不可观测的非幂等操作</h3>
+<div class="notice stop"><strong>绝对不要“再做一次试试”。</strong>例如支付、发布、外部提交在中断瞬间到底成功没有且无法查询时，必须保持 UNKNOWN_AFTER_INTERRUPTION。</div>
+<div class="pager"></div></article><article class="section" id="sec-17" data-id="17" data-title="Recovery Capsule：大型项目的恢复存档"><h1>Recovery Capsule：大型项目的恢复存档</h1>
+<p>Recovery Capsule 可以理解成“可恢复存档”。每个已经被决策端接受的 Work Unit 都应该留下恢复锚点。</p>
+<p>它帮助系统知道：当前 Requirement 是哪个版本、最后哪个 Decision 和 Result 已确认、最新安全 checkpoint 在哪里、证据索引在哪里、还有没有未知 Action 或未知 Message。</p>
+<div class="notice good"><strong>你要做什么：</strong>日常不用打开 Recovery Capsule；只要不要手工删除状态目录。</div>
+<div class="pager"></div></article><article class="section" id="sec-18" data-id="18" data-title="想让项目连续跑几小时或几天，先看这里"><h1>想让项目连续跑几小时或几天，先看这里</h1>
+<table><thead><tr><th>需要的能力</th><th>人话解释</th><th>没有它会怎样</th></tr></thead><tbody>
+<tr><td>Runtime-native continuation 或 Supervisor</td><td>一轮结束后能自动启动下一 Controller Tick。</td><td>半夜一轮结束后可能停住。</td></tr>
+<tr><td>Durable State</td><td>进度真正落到硬盘，不只靠聊天记忆。</td><td>重启后容易不知道做到哪。</td></tr>
+<tr><td>Atomic Lease / Fencing</td><td>同一时间只让一个控制器真正写。</td><td>两个实例可能重复动作。</td></tr>
+<tr><td>Recovery Capsule</td><td>每轮都有恢复锚点。</td><td>中断后沉没成本更大。</td></tr>
+<tr><td>真实恢复演练</td><td>故意中断一次，确认能安全恢复。</td><td>纸面上安全，实际可能恢复不了。</td></tr>
+</tbody></table>
+<div class="notice warn"><strong>当前现实状态：</strong>RC2.2/CP1 仍处于测试阶段，真正无人值守能力必须由真实 Runtime Regression 证明。</div>
+<div class="pager"></div></article><article class="section" id="sec-19" data-id="19" data-title="项目什么时候才算真的完成"><h1>项目什么时候才算真的完成</h1>
+<p>不是 CodeBuddy 说 complete 就算完成，也不是某一轮 SUCCESS 就算完成。</p>
+<p>只有决策端经过最终完成检查，确认所有要求、结果、恢复请求、未知 Action/Message 都已经收敛，才能宣布项目完成。</p>
+<div class="notice good"><strong>最后人工抽查：</strong>确认最终文件真的存在、能打开、内容符合需求。</div>
+<div class="pager"></div></article><article class="section" id="sec-20" data-id="20" data-title="小白版“绝对不要做”清单"><h1>小白版“绝对不要做”清单</h1>
+<ul>
+<li>不要看到页面卡住就重复发送同一条消息。</li>
+<li>不要看到“消息发送超时”就马上点 Retry。</li>
+<li>不要看到 CodeBuddy complete 就手工输入“继续闭环执行”。</li>
+<li>不要因为命令报错就从头重跑整个 Work Unit。</li>
+<li>不要同时打开两个相同角色的 Decision 或 Repair 主页面。</li>
+<li>不要自己修改 MESSAGE_ID、DECISION_ID、ROUND_ID 等机器字段。</li>
+<li>不要删除 Control State、Recovery Capsule、Evidence、Ledger。</li>
+<li>不要把修复端当第二个决策端。</li>
+<li>不要混用不同版本的运行文档。</li>
+<li>不要在不知道外部动作是否成功时自动再做一次不可重复操作。</li>
+</ul>
+<div class="pager"></div></article><article class="section" id="sec-21" data-id="21" data-title="常见问题：遇到时直接看这里"><h1>常见问题：遇到时直接看这里</h1>
+<table><thead><tr><th>问题</th><th>先做什么</th></tr></thead><tbody>
+<tr><td>CodeBuddy 显示 complete</td><td>正常情况下什么都不要输入，等自动续跑。</td></tr>
+<tr><td>CodeBuddy 一直没继续</td><td>如果 Supervisor 已验证应自动重启；自动链明显没恢复时再用人工恢复桥。</td></tr>
+<tr><td>ChatGPT 一直“正在思考”</td><td>不要重发，让 CodeBuddy 按页面恢复流程刷新和查历史。</td></tr>
+<tr><td>回复框有了但正文为空</td><td>不要重发、不点重新生成；优先刷新和 history audit。</td></tr>
+<tr><td>“消息发送超时，请重试”</td><td>不要马上点 Retry；先核对原消息和回复是否已存在。</td></tr>
+<tr><td>电脑重启</td><td>不要从头再跑；先恢复环境，再做状态收敛。</td></tr>
+<tr><td>登录/CAPTCHA/2FA</td><td>本人完成身份验证，之后让系统继续恢复。</td></tr>
+<tr><td>完全不知道发生了什么</td><td>不猜、不重发、不重做；复制最后内容 + 真实情况给 Repair。</td></tr>
+</tbody></table>
+<div class="pager"></div></article><article class="section" id="sec-22" data-id="22" data-title="一页快速操作流程"><h1>一页快速操作流程</h1>
+<pre>【新项目】
+1. 打开需求润色端 → 上传需求润色端文档。
+2. 用普通话描述任务。
+3. 确认关键权限 / 路径 / 限制。
+4. 拿到完整 Frozen Requirement Package。
+5. 新开决策端 → 上传决策端启动文档。
+6. 把 Frozen Requirement Package 完整交给决策端。
+7. 新开异常修复端 → 上传修复端启动文档，让它待机。
+8. 复制“决策端网址”和“修复端网址”。
+9. 打开 CodeBuddy TXT → Ctrl+A → Ctrl+C。
+10. 粘贴到 CodeBuddy 并发送。
+11. 按提示把两个网址发给 CodeBuddy。
+12. 等系统完成 Handshake / Control Setup。
+13. 之后进入：Decision → CodeBuddy → Verify → Result → Decision。
+
+【正常运行】
+14. 不需要每轮输入“继续”。
+15. CodeBuddy complete 不等于项目完成。
+16. 网页小故障先让 CodeBuddy 自动恢复。
+17. L0 恢复无进展才自动进入 Repair。
+18. Repair 连续无进展才升级 Emergency Continuation。
+
+【人工测试】
+19. 决策端给完整测试表 → 你按步骤测试 → 把结果交 CodeBuddy → CodeBuddy 转交决策端。
+
+【自动链彻底断了】
+20. 不重发、不重做 → 复制 CodeBuddy 最后内容 + 真实情况 → 人工恢复桥 → Repair。
+
+【最终完成】
+21. 只有 DecisionLayer 最终裁定 PROJECT_COMPLETE 后才算完成。</pre>
+<div class="pager"></div></article><article class="section" id="sec-23" data-id="23" data-title="常见专业词，用最简单的话理解"><h1>常见专业词，用最简单的话理解</h1>
+<table><thead><tr><th>术语</th><th>人话解释</th></tr></thead><tbody>
+<tr><td>Requirement Package</td><td>正式任务单。</td></tr>
+<tr><td>DecisionLayer</td><td>项目经理。</td></tr>
+<tr><td>Work Unit</td><td>这一轮要完成的一小块工作。</td></tr>
+<tr><td>Fresh Verify</td><td>重新实际查看，不相信“应该已经成功”。</td></tr>
+<tr><td>Control State Root</td><td>ClosedLoop 自己的状态文件夹。</td></tr>
+<tr><td>Ledger</td><td>按顺序记“发生过什么”的记录本。</td></tr>
+<tr><td>Checkpoint</td><td>可以安全接着往下走的存档点。</td></tr>
+<tr><td>Recovery Capsule</td><td>大型项目的恢复存档包。</td></tr>
+<tr><td>Lease / Fencing</td><td>同一时间只让一个控制器拿着“写入钥匙”。</td></tr>
+<tr><td>Supervisor</td><td>自动接力/看门人。</td></tr>
+<tr><td>Controller Tick</td><td>CodeBuddy 的一轮控制工作。</td></tr>
+<tr><td>Incident Capsule</td><td>CodeBuddy 发给修复端的故障资料包。</td></tr>
+<tr><td>Manual Recovery Bridge</td><td>自动链断了以后，你帮忙搬运事实和修复指令。</td></tr>
+<tr><td>Emergency Continuation</td><td>原闭环修不回来时，从恢复存档重新建立合法控制链。</td></tr>
+</tbody></table>
+<div class="pager"></div></article><article class="section" id="sec-24" data-id="24" data-title="文件完整性和版本"><h1>文件完整性和版本</h1>
+<p>同一个项目尽量全部使用同一套版本文件，不要把旧版 CodeBuddy 指令和新版 Decision/Repair 混着用。</p>
+<div class="notice info"><strong>SHA256：</strong>可以理解成“文件指纹”。平时不用管，只有怀疑下载文件损坏或被改过时才对比。</div>
+<div class="notice info"><strong>静态关键字审计 JSON：</strong>给协议维护者看的机器检查结果，普通用户可以完全不打开。</div>
+<div class="pager"></div></article><article class="section" id="sec-25" data-id="25" data-title="最后再记住这 7 句话"><h1>最后再记住这 7 句话</h1>
+<ol>
+<li>项目正常时：决策端决定，CodeBuddy 执行。</li>
+<li>大型任务可以很多轮；每轮都要执行、验证、汇报、再等下一 Decision。</li>
+<li>正常情况下不要手工输入“继续闭环执行”。</li>
+<li>网页显示异常时先恢复页面和消息状态，不要重复发送。</li>
+<li>修复端只修闭环，不负责业务决策。</li>
+<li>自动链也断了时，你只负责观察、复制、描述、身份验证和搬运信息。</li>
+<li>真正的“项目完成”只能由决策端最终裁定。</li>
+</ol>
+<div class="notice good"><strong>只记一句：</strong>不知道怎么办时，不要猜、不要重复、不要从头重跑。保留现场，让系统或修复端先判断当前状态。</div>
+<div class="pager"></div></article><article class="section" id="sec-cp1" data-id="cp1" data-title="RC2.2-CP1 最新收口提示"><h1>RC2.2-CP1 最新收口提示</h1>
+<p>这部分来自 RC2.2-CP1 的增量说明，用来补充当前测试阶段的关键边界。</p>
+<ul>
+<li><strong>自动续跑能力不够时，项目不应该正式开始。</strong>如果系统检查不到自动续跑或 Supervisor 已真实可用，应在启动门禁直接 BLOCKED，而不是先跑一轮再让用户继续。</li>
+<li><strong>人工恢复桥重复发送时不要改内容。</strong>同一恢复桥应保持同一个身份和内容，不要修改几个字后反复发送。</li>
+<li><strong>登录/验证码期间 Supervisor 应真正等人。</strong>不能把人工等待误判为卡死。</li>
+<li><strong>人的记忆和系统记录冲突时，不要自己选。</strong>应保留现场交给 Repair/DecisionLayer。</li>
+<li><strong>第三方服务不可用或不可重复动作状态不明时，不要“再做一次试试”。</strong></li>
+</ul>
+<div class="notice warn"><strong>状态：</strong>RC2.2-CP1 仍是 Paper/Runtime Regression 阶段，不代表生产冻结。</div>
+<div class="pager"></div></article>
+  </div>
+</main>
+<button class="back" id="back" title="返回顶部">↑</button>
+<script>
+const sections=[...document.querySelectorAll('.section')];
+const nav=[...document.querySelectorAll('.nav-item')];
+const topTitle=document.getElementById('topTitle');
+const sidebar=document.getElementById('sidebar');
+const overlay=document.getElementById('overlay');
+const search=document.getElementById('search');
+let current=localStorage.getItem('closedloop-chapter') || sections[0].dataset.id;
+
+function openSec(id){
+  let target=sections.find(s=>s.dataset.id===id) || sections[0];
+  sections.forEach(s=>s.classList.toggle('active',s===target));
+  nav.forEach(n=>n.classList.toggle('active',n.dataset.id===target.dataset.id));
+  topTitle.textContent=target.dataset.title;
+  current=target.dataset.id;
+  localStorage.setItem('closedloop-chapter',current);
+  history.replaceState(null,'','#'+encodeURIComponent(current));
+  window.scrollTo({top:0,behavior:'smooth'});
+  sidebar.classList.remove('open'); overlay.classList.remove('show');
+}
+nav.forEach(n=>n.onclick=()=>openSec(n.dataset.id));
+sections.forEach((s,i)=>{
+  const p=s.querySelector('.pager');
+  const prev=i>0?sections[i-1]:null,next=i<sections.length-1?sections[i+1]:null;
+  p.innerHTML=`<button ${prev?'':'disabled'} data-prev>${prev?'← '+prev.dataset.title:'已经是第一章'}</button><button ${next?'':'disabled'} data-next>${next?next.dataset.title+' →':'已经是最后一章'}</button>`;
+  if(prev)p.querySelector('[data-prev]').onclick=()=>openSec(prev.dataset.id);
+  if(next)p.querySelector('[data-next]').onclick=()=>openSec(next.dataset.id);
+});
+search.oninput=()=>{
+  const q=search.value.trim().toLowerCase();
+  nav.forEach(n=>{
+    const s=sections.find(x=>x.dataset.id===n.dataset.id);
+    const hay=(n.innerText+' '+s.innerText).toLowerCase();
+    n.style.display=!q||hay.includes(q)?'flex':'none';
+  });
+};
+let fs=parseInt(localStorage.getItem('closedloop-font')||'17',10);
+function apply(){fs=Math.max(14,Math.min(24,fs));document.documentElement.style.setProperty('--font',fs+'px');localStorage.setItem('closedloop-font',String(fs))}
+apply();
+document.getElementById('minus').onclick=()=>{fs--;apply()};
+document.getElementById('plus').onclick=()=>{fs++;apply()};
+document.getElementById('reset').onclick=()=>{fs=17;apply()};
+document.getElementById('menu').onclick=()=>{sidebar.classList.add('open');overlay.classList.add('show')};
+overlay.onclick=()=>{sidebar.classList.remove('open');overlay.classList.remove('show')};
+document.getElementById('back').onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+const hash=decodeURIComponent(location.hash.slice(1)); if(hash) current=hash; openSec(current);
+</script>
+</body>
+</html>
